@@ -1,10 +1,14 @@
 package v01_test
 
 import (
+	"bytes"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 
+	cloudevents "github.com/dispatchframework/cloudevents-go-sdk"
 	"github.com/dispatchframework/cloudevents-go-sdk/v01"
 )
 
@@ -76,4 +80,27 @@ func TestGetSet(t *testing.T) {
 		t.Errorf("Get value for ext key should be somevalue, but is %s", value)
 	}
 
+}
+
+func Test(t *testing.T) {
+	event := v01.Event{
+		EventType:        "dispatch",
+		EventTypeVersion: "0.1",
+		EventID:          "00001",
+		Source:           "dispatch",
+	}
+
+	var buffer bytes.Buffer
+	json.NewEncoder(&buffer).Encode(event)
+	req := httptest.NewRequest("GET", "/", &buffer)
+	req.Header = http.Header{}
+	req.Header.Set("CE-eventType", "dispatch")
+	req.Header.Set("CE-sourceKey", "dispatch")
+	req.Header.Set("CE-eventID", "00001")
+	e, err := cloudevents.FromHTTPRequest(req, reflect.TypeOf(v01.Event{}))
+	if err != nil {
+		t.Errorf("Failed converting error %v", err)
+	}
+
+	t.Errorf("Got event: %+v", e)
 }

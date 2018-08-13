@@ -6,13 +6,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dispatchframework/cloudevents-go-sdk"
+	cloudevents "github.com/dispatchframework/cloudevents-go-sdk"
 )
 
 const (
 	eventTypeKey        = "eventType"
 	eventTypeVersionKey = "eventTypeVersion"
-	sourceKey           = "sourceKey"
+	sourceKey           = "source"
 	eventIDKey          = "eventID"
 	eventTimeKey        = "eventTime"
 	schemaURLKey        = "schemaURL"
@@ -26,29 +26,29 @@ const (
 type Event struct {
 	// EventType is a mandatory property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#eventtype
-	EventType string `json:"eventType"`
+	EventType string `json:"eventType" cloudevent:"CE-EventType,required"`
 	// EventTypeVersion is an optional property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#eventtypeversion
-	EventTypeVersion string `json:"eventTypeVersion,omitempty"`
+	EventTypeVersion string `json:"eventTypeVersion,omitempty" cloudevent:"CE-EventTypeVersion"`
 	// Source is a mandatory property
 	// TODO: ensure URI parsing
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#source
-	Source string `json:"source"`
+	Source string `json:"source" cloudevent:"CE-Source,required"`
 	// EventID is a mandatory property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#eventid
-	EventID string `json:"eventID"`
+	EventID string `json:"eventID" cloudevent:"CE-EventID,required"`
 	// EventTime is an optional property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#eventtime
-	EventTime *time.Time `json:"eventTime,omitempty"`
+	EventTime *time.Time `json:"eventTime,omitempty" cloudevent:"CE-EventTime"`
 	// SchemaURL is an optional property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#schemaurl
-	SchemaURL string `json:"schemaURL,omitempty"`
+	SchemaURL string `json:"schemaURL,omitempty" cloudevent:"CE-SchemaURL"`
 	// ContentType is an optional property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#contenttype
-	ContentType string `json:"contentType,omitempty"`
+	ContentType string `json:"contentType,omitempty" cloudevent:"Content-Type"`
 	// Extensions is an optional property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#extensions
-	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Extensions map[string]interface{} `json:"extensions,omitempty" cloudevent:"CE-X-,map"`
 	// Data is an optional property
 	// https://github.com/cloudevents/spec/blob/v0.1/spec.md#data-1
 	Data interface{} `json:"data,omitempty"`
@@ -115,6 +115,8 @@ func (e *Event) Validate() error {
 	if e.Source == "" {
 		return cloudevents.RequiredPropertyError(sourceKey)
 	}
+	return nil
+	//return fmt.Errorf("Invalid cloudevent")
 }
 
 // MarshalJSON implements the JSON Marshaler interface.

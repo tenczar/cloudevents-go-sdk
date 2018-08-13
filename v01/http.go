@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dispatchframework/cloudevents-go-sdk"
+	cloudevents "github.com/dispatchframework/cloudevents-go-sdk"
 )
 
 // HTTPFormat type wraps supported modes of formatting CloudEvent as HTTP request.
