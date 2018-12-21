@@ -8,6 +8,9 @@ import (
 // Version01 holds a version string for CloudEvents specification version 0.1. See also EventV01 interface
 // https://github.com/cloudevents/spec/blob/v0.1/spec.md
 const Version01 = "0.1"
+
+// Version02 holds a version string for CloudEvents specification version 0.2. See also EventV02 interface
+// https://github.com/cloudevents/spec/blob/v0.2/spec.md
 const Version02 = "0.2"
 
 // Event interface is a generic abstraction over all possible versions and implementations of CloudEvents.

@@ -55,6 +55,7 @@ func (e Event) CloudEventVersion() (version string) {
 	return e.SpecVersion
 }
 
+// GetContentType returns the ContentType of the CloudEvent
 func (e Event) GetContentType() string {
 	return e.ContentType
 }

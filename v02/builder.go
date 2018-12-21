@@ -7,6 +7,7 @@ import (
 	cloudevents "github.com/cloudevents/sdk-go"
 )
 
+// CloudEventBuilder an interface for a builder to instantiate and validate CloudEvent instances
 type CloudEventBuilder interface {
 	SpecVersion(specVersion string) CloudEventBuilder
 	Type(t string) CloudEventBuilder
@@ -32,6 +33,7 @@ type cloudEventBuilder struct {
 	extensions  map[string]interface{}
 }
 
+// NewCloudEventBuilder a function for instantiating a CloudEventBuilder
 func NewCloudEventBuilder() CloudEventBuilder {
 	return &cloudEventBuilder{
 		extensions: make(map[string]interface{}),
@@ -101,6 +103,10 @@ func (b *cloudEventBuilder) Build() (Event, error) {
 		SchemaURL:   b.schemaURL,
 		ContentType: b.contentType,
 		Data:        b.data,
+	}
+
+	for key, val := range b.extensions {
+		event.Set(key, val)
 	}
 
 	return event, nil
